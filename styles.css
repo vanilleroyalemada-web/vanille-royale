@@ -219,3 +219,82 @@ button{font:inherit}
   .footer-bottom{flex-direction:column;text-align:center}
   .footer-bottom div{justify-content:center;flex-wrap:wrap}
 }
+
+/* =====================================================
+   PRIX & PANIER (ajout) — tout ce qui suit est nouveau
+   ===================================================== */
+
+/* Prix et choix du conditionnement sur les cartes produit */
+.product-buy{margin-top:18px;padding-top:18px;border-top:1px solid var(--border)}
+.product-format-label{display:block;margin-bottom:6px;color:var(--muted);font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+.product-format{
+  width:100%;min-height:44px;padding:0 38px 0 14px;border:1px solid var(--border);border-radius:0;
+  background:var(--ivory) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23133c2c' stroke-width='1.6'/%3E%3C/svg%3E") no-repeat right 14px center;
+  color:var(--green);font:600 13px "Montserrat",Arial,sans-serif;
+  -webkit-appearance:none;appearance:none;cursor:pointer
+}
+.product-format:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.product-price{margin:14px 0 12px;color:var(--green);font-family:"Cormorant Garamond",serif;font-size:36px;font-weight:700;line-height:1}
+.add-to-cart{width:100%;cursor:pointer}
+
+/* Compteur d'articles */
+.cart-count{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;margin-left:6px;border-radius:999px;background:var(--gold);color:var(--green-deep);font-size:9px;font-weight:700;line-height:1;letter-spacing:0}
+.cart-count.is-empty{display:none}
+
+/* Bouton panier flottant */
+.cart-fab{
+  position:fixed;right:18px;bottom:18px;z-index:40;width:58px;height:58px;
+  display:flex;align-items:center;justify-content:center;padding:0;border:0;border-radius:50%;
+  background:var(--green);color:var(--gold-soft);box-shadow:0 14px 34px rgba(9,38,27,.35);
+  cursor:pointer;transition:transform .25s
+}
+.cart-fab:hover{transform:translateY(-3px)}
+.cart-fab svg{width:26px;height:26px}
+.cart-fab .cart-count{position:absolute;top:-4px;right:-4px;margin:0;border:2px solid var(--ivory)}
+.cart-fab.bump{animation:cartbump .4s}
+@keyframes cartbump{50%{transform:scale(1.15)}}
+
+/* Volet du panier */
+.cart-overlay{position:fixed;inset:0;z-index:150;background:rgba(3,12,8,.55);opacity:0;visibility:hidden;transition:.3s}
+.cart-overlay.open{opacity:1;visibility:visible}
+.cart-drawer{
+  position:fixed;top:0;right:0;bottom:0;z-index:160;width:min(440px,100%);
+  display:flex;flex-direction:column;background:var(--ivory);box-shadow:-24px 0 60px rgba(0,0,0,.25);
+  transform:translateX(100%);visibility:hidden;transition:transform .35s ease,visibility .35s
+}
+.cart-drawer.open{transform:none;visibility:visible}
+.cart-drawer [hidden]{display:none!important}
+.cart-head{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;background:var(--green-deep);color:white;border-bottom:3px solid var(--gold)}
+.cart-head h2{margin:0;font-family:"Cormorant Garamond",serif;font-size:30px;font-weight:600}
+.cart-close{background:none;border:0;padding:0 4px;color:white;font-size:38px;line-height:1;cursor:pointer}
+.cart-body{flex:1;overflow-y:auto;padding:10px 24px}
+.cart-empty{margin:44px 0;text-align:center;color:var(--muted);font-size:13px}
+.cart-message{margin:14px 0 4px;padding:14px;background:white;border-left:3px solid var(--gold);color:var(--green);font-size:12px;line-height:1.5}
+.cart-message.error{border-left-color:#a33;color:#a33}
+.cart-items{list-style:none;margin:0;padding:0}
+.cart-item{display:grid;grid-template-columns:1fr auto;gap:8px 14px;padding:18px 0;border-bottom:1px solid var(--border)}
+.cart-item-name{margin:0;color:var(--green);font-family:"Cormorant Garamond",serif;font-size:21px;font-weight:700;line-height:1.1}
+.cart-item-label{margin:3px 0 0;color:var(--muted);font-size:11px;line-height:1.4}
+.cart-item-total{color:var(--green);font-size:13px;white-space:nowrap}
+.cart-qty{display:inline-flex;align-items:center;justify-self:start;border:1px solid var(--border)}
+.cart-qty button{width:36px;height:36px;background:none;border:0;color:var(--green);font-size:18px;cursor:pointer}
+.cart-qty span{min-width:30px;text-align:center;font-size:13px;font-weight:600}
+.cart-remove{justify-self:end;align-self:center;background:none;border:0;color:var(--muted);font-size:10px;letter-spacing:.1em;text-transform:uppercase;text-decoration:underline;cursor:pointer}
+.cart-foot{padding:20px 24px 24px;background:var(--cream);border-top:1px solid var(--border)}
+.cart-row{display:flex;justify-content:space-between;gap:12px;margin-bottom:8px;font-size:13px}
+.cart-total{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);color:var(--green);font-size:15px;align-items:baseline}
+.cart-total strong{font-family:"Cormorant Garamond",serif;font-size:30px;line-height:1}
+.cart-note{margin:10px 0 16px;color:var(--muted);font-size:10px;line-height:1.5}
+.cart-pay{margin-bottom:10px}
+.cart-mail{width:100%;min-height:46px;cursor:pointer}
+.cart-mail:not(.btn-gold){border-color:var(--green);color:var(--green)}
+.cart-mail:not(.btn-gold):hover{background:var(--green);color:white}
+.cart-clear{display:block;margin:14px auto 0;background:none;border:0;color:var(--muted);font-size:10px;letter-spacing:.08em;text-decoration:underline;cursor:pointer}
+
+/* iPhone : 16 px minimum pour éviter le zoom automatique sur le menu déroulant */
+@media(max-width:840px){
+  .product-format{font-size:16px}
+}
+@media(max-width:600px){
+  .cart-fab{right:14px;bottom:14px}
+}
