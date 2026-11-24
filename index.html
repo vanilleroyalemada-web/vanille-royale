@@ -44,7 +44,7 @@
       <a href="#produits">La collection</a>
       <a href="#galerie">Galerie</a>
       <a href="#contact">Contact</a>
-      <a class="order-btn" href="mailto:vanilleroyalemada@gmail.com?subject=Commande%20VANILLE%20ROYALE">Commander</a>
+      <a class="order-btn" href="#panier" data-open-cart>Panier <span class="cart-count is-empty" data-cart-count>0</span></a>
     </nav>
   </header>
 
@@ -142,7 +142,17 @@
               <p class="product-type">Vanille Planifolia</p>
               <h3>Vanille de Sambava</h3>
               <p>Gousses charnues, souples et intensément parfumées, aux notes chaudes et gourmandes.</p>
-              <a href="mailto:vanilleroyalemada@gmail.com?subject=Vanille%20Planifolia%20de%20Sambava">Découvrir <span>→</span></a>
+              <div class="product-buy" data-product="vanille" data-name="Vanille de Sambava">
+                <label class="product-format-label" for="format-vanille">Conditionnement</label>
+                <select id="format-vanille" class="product-format">
+                  <option value="2" data-price="800" data-label="2 gousses">2 gousses</option>
+                  <option value="3" data-price="1200" data-label="3 gousses">3 gousses</option>
+                  <option value="5" data-price="2000" data-label="5 gousses + 1 offerte">5 gousses + 1 offerte</option>
+                  <option value="10" data-price="4000" data-label="10 gousses + 2 offertes">10 gousses + 2 offertes</option>
+                </select>
+                <p class="product-price" aria-live="polite">8,00 €</p>
+                <button type="button" class="btn btn-gold add-to-cart">Ajouter au panier</button>
+              </div>
             </div>
           </article>
 
@@ -155,7 +165,15 @@
               <p class="product-type">Poivre rare</p>
               <h3>Poivre sauvage</h3>
               <p>Le Voatsiperifery révèle des notes boisées, fraîches et délicatement citronnées.</p>
-              <a href="mailto:vanilleroyalemada@gmail.com?subject=Poivre%20sauvage%20Voatsiperifery">Découvrir <span>→</span></a>
+              <div class="product-buy" data-product="poivre-sauvage" data-name="Poivre sauvage de Madagascar">
+                <label class="product-format-label" for="format-poivre-sauvage">Conditionnement</label>
+                <select id="format-poivre-sauvage" class="product-format">
+                  <option value="25" data-price="550" data-label="25 g">25 g</option>
+                  <option value="50" data-price="1100" data-label="50 g">50 g</option>
+                </select>
+                <p class="product-price" aria-live="polite">5,50 €</p>
+                <button type="button" class="btn btn-gold add-to-cart">Ajouter au panier</button>
+              </div>
             </div>
           </article>
 
@@ -168,7 +186,15 @@
               <p class="product-type">Poivre intense</p>
               <h3>Poivre noir moulu</h3>
               <p>Un poivre équilibré et expressif, moulu pour conserver toute la richesse de ses arômes.</p>
-              <a href="mailto:vanilleroyalemada@gmail.com?subject=Poivre%20noir%20moulu">Découvrir <span>→</span></a>
+              <div class="product-buy" data-product="poivre-moulu" data-name="Poivre moulu de Madagascar">
+                <label class="product-format-label" for="format-poivre-moulu">Conditionnement</label>
+                <select id="format-poivre-moulu" class="product-format">
+                  <option value="50" data-price="700" data-label="50 g">50 g</option>
+                  <option value="100" data-price="1300" data-label="100 g">100 g</option>
+                </select>
+                <p class="product-price" aria-live="polite">7,00 €</p>
+                <button type="button" class="btn btn-gold add-to-cart">Ajouter au panier</button>
+              </div>
             </div>
           </article>
 
@@ -181,7 +207,15 @@
               <p class="product-type">Curcuma premium</p>
               <h3>Curcuma de Madagascar</h3>
               <p>Une épice lumineuse, chaude et profonde, sélectionnée pour sa couleur et son intensité.</p>
-              <a href="mailto:vanilleroyalemada@gmail.com?subject=Curcuma%20de%20Madagascar">Découvrir <span>→</span></a>
+              <div class="product-buy" data-product="curcuma" data-name="Curcuma de Madagascar">
+                <label class="product-format-label" for="format-curcuma">Conditionnement</label>
+                <select id="format-curcuma" class="product-format">
+                  <option value="50" data-price="500" data-label="50 g">50 g</option>
+                  <option value="100" data-price="900" data-label="100 g">100 g</option>
+                </select>
+                <p class="product-price" aria-live="polite">5,00 €</p>
+                <button type="button" class="btn btn-gold add-to-cart">Ajouter au panier</button>
+              </div>
             </div>
           </article>
         </div>
@@ -289,6 +323,38 @@
     <button class="lightbox-close" aria-label="Fermer">×</button>
     <img src="" alt="">
   </div>
+
+  <button class="cart-fab" type="button" data-open-cart aria-label="Ouvrir le panier">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M6 8h12l-1 12H7L6 8z"/>
+      <path d="M9 8V6a3 3 0 0 1 6 0v2"/>
+    </svg>
+    <span class="cart-count is-empty" data-cart-count>0</span>
+  </button>
+
+  <div class="cart-overlay"></div>
+  <aside class="cart-drawer" id="panier" role="dialog" aria-modal="true" aria-label="Votre panier" aria-hidden="true">
+    <div class="cart-head">
+      <h2>Votre panier</h2>
+      <button class="cart-close" type="button" aria-label="Fermer le panier">×</button>
+    </div>
+
+    <div class="cart-body">
+      <p class="cart-message" role="status" hidden></p>
+      <p class="cart-empty">Votre panier est vide.</p>
+      <ul class="cart-items"></ul>
+    </div>
+
+    <div class="cart-foot" hidden>
+      <div class="cart-row"><span>Sous-total</span><strong class="cart-subtotal"></strong></div>
+      <div class="cart-row"><span>Livraison</span><strong class="cart-shipping"></strong></div>
+      <div class="cart-row cart-total"><span>Total</span><strong class="cart-total-value"></strong></div>
+      <p class="cart-note">Livraison exclusivement en France métropolitaine.</p>
+      <div id="paypal-buttons" class="cart-pay"></div>
+      <a class="btn cart-mail" href="#">Commander par e-mail</a>
+      <button class="cart-clear" type="button">Vider le panier</button>
+    </div>
+  </aside>
 
   <script src="script.js"></script>
 </body>
