@@ -80,10 +80,14 @@ document.getElementById('year').textContent = new Date().getFullYear();
     currency: 'EUR',
 
     // Frais de livraison en CENTIMES (590 = 5,90 €). 0 = livraison offerte.
-    shippingFlat: 0,
+    shippingFlat: 590,
 
-    // Livraison offerte à partir de ce montant, en CENTIMES (6000 = 60 €). 0 = désactivé.
-    freeShippingFrom: 0,
+    // Livraison offerte à partir de ce montant d'achat (produits, hors livraison),
+    // en CENTIMES (5000 = 50 €). 0 = désactivé.
+    freeShippingFrom: 5000,
+
+    // Commande minimum (produits, hors livraison), en CENTIMES (2000 = 20 €). 0 = pas de minimum.
+    minOrder: 2000,
 
     orderEmail: 'vanilleroyalemada@gmail.com',
     storageKey: 'vanilleRoyaleCart'
@@ -105,6 +109,8 @@ document.getElementById('year').textContent = new Date().getFullYear();
   const totalEl = drawer.querySelector('.cart-total-value');
   const mailBtn = drawer.querySelector('.cart-mail');
   const clearBtn = drawer.querySelector('.cart-clear');
+  const noteEl = drawer.querySelector('.cart-note');
+  const payEl = document.getElementById('paypal-buttons');
 
   /* ---------- Catalogue lu depuis la page (index.html) ---------- */
   const catalog = {};
@@ -240,6 +246,11 @@ document.getElementById('year').textContent = new Date().getFullYear();
   }
 
   /* ---------- Affichage ---------- */
+  // Message "commande minimum", créé ici et inséré juste avant la note de livraison.
+  const minEl = el('p', 'cart-message');
+  minEl.hidden = true;
+  noteEl.before(minEl);
+
   function render() {
     const count = cart.reduce((n, i) => n + i.qty, 0);
     const t = totals();
@@ -287,7 +298,30 @@ document.getElementById('year').textContent = new Date().getFullYear();
     shippingEl.textContent = t.shipping ? fmt(t.shipping) : 'Offerte';
     totalEl.textContent = fmt(t.total);
 
-    if (count > 0) {
+    // Commande minimum : tant qu'il n'est pas atteint, on masque le paiement et la commande par e-mail.
+    const missing = Math.max(0, CONFIG.minOrder - t.subtotal);
+    const canOrder = count > 0 && missing === 0;
+
+    minEl.hidden = !(count > 0 && missing > 0);
+    if (!minEl.hidden) {
+      minEl.textContent = 'Commande minimum : ' + fmt(CONFIG.minOrder) +
+        ' (hors livraison). Il vous manque ' + fmt(missing) + ' pour pouvoir commander.';
+    }
+
+    const notes = [];
+    if (CONFIG.shippingFlat && CONFIG.freeShippingFrom) {
+      notes.push(t.subtotal >= CONFIG.freeShippingFrom
+        ? 'Livraison offerte.'
+        : 'Livraison offerte dès ' + fmt(CONFIG.freeShippingFrom) + ' d’achat : plus que ' +
+          fmt(CONFIG.freeShippingFrom - t.subtotal) + '.');
+    }
+    notes.push('Livraison exclusivement en France métropolitaine.');
+    noteEl.textContent = notes.join(' ');
+
+    payEl.hidden = !canOrder;
+    mailBtn.hidden = !canOrder;
+
+    if (canOrder) {
       mailBtn.href = orderMailto();
       mailBtn.textContent = CONFIG.paypalClientId ? 'Ou commander par e-mail' : 'Commander par e-mail';
       mailBtn.classList.toggle('btn-gold', !CONFIG.paypalClientId);
@@ -357,6 +391,7 @@ document.getElementById('year').textContent = new Date().getFullYear();
 
   function setupPayPal() {
     if (!CONFIG.paypalClientId || !cart.length) return;
+    if (totals().subtotal < CONFIG.minOrder) return;
     if (paypalState === 'loading' || paypalState === 'ready' || paypalState === 'failed') return;
 
     if (window.paypal && window.paypal.Buttons) {
@@ -387,7 +422,7 @@ document.getElementById('year').textContent = new Date().getFullYear();
       style: { layout: 'vertical', shape: 'pill', color: 'gold', label: 'pay' },
 
       onClick: (data, actions) => {
-        if (!cart.length) return actions.reject();
+        if (!cart.length || totals().subtotal < CONFIG.minOrder) return actions.reject();
         clearMessage();
         return actions.resolve();
       },
